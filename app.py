@@ -181,6 +181,25 @@ with st.sidebar:
             st.rerun()
 
     st.markdown("---")
+
+    # Auto-cascade option
+    st.subheader("⚙️ Settings")
+    auto_cascade = st.checkbox(
+        "Auto-cascade Year 1 to Year 2 & 3",
+        value=False,
+        help="When enabled, changes to Year 1 will automatically apply growth rates to Years 2 & 3"
+    )
+
+    debug_mode = st.checkbox(
+        "Debug Mode",
+        value=False,
+        help="Show calculation details and error information"
+    )
+
+    if auto_cascade:
+        st.info("📊 Auto-cascade enabled: Year 2 & 3 will inherit Year 1 changes with growth adjustments")
+
+    st.markdown("---")
     st.markdown("Adjust variables for each year")
 
     year_tabs = st.tabs(["Year 1", "Year 2", "Year 3"])
@@ -331,6 +350,38 @@ with st.sidebar:
                 min_value=5000, max_value=100000, step=1000, key=f"{year_key}_worker_salary"
             )
 
+# Apply auto-cascade if enabled
+if auto_cascade:
+    year1 = st.session_state.year_data['year1']
+    year2 = st.session_state.year_data['year2']
+    year3 = st.session_state.year_data['year3']
+
+    # Cascade pricing (with slight reductions for scale)
+    year2['pricing']['container_price'] = int(year1['pricing']['container_price'] * 0.97)  # 3% reduction
+    year3['pricing']['container_price'] = int(year2['pricing']['container_price'] * 0.97)
+
+    year2['pricing']['monthly_fee'] = year1['pricing']['monthly_fee']
+    year3['pricing']['monthly_fee'] = int(year1['pricing']['monthly_fee'] * 1.10)  # 10% increase
+
+    year2['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+    year3['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+
+    year2['pricing']['deposit'] = year1['pricing']['deposit']
+    year3['pricing']['deposit'] = year1['pricing']['deposit']
+
+    # Cascade COGS (with efficiency improvements)
+    year2['cogs']['wash_cost'] = year1['cogs']['wash_cost'] * 0.92  # 8% reduction
+    year3['cogs']['wash_cost'] = year2['cogs']['wash_cost'] * 0.91  # further 9% reduction
+
+    year2['cogs']['collection_cost'] = year1['cogs']['collection_cost'] * 0.90  # 10% reduction
+    year3['cogs']['collection_cost'] = year2['cogs']['collection_cost'] * 0.89  # further 11% reduction
+
+    year2['cogs']['container_cost'] = year1['cogs']['container_cost']
+    year3['cogs']['container_cost'] = year1['cogs']['container_cost']
+
+    year2['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+    year3['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+
 # Calculate income statements for all years
 income_statements = {}
 for year_key in ['year1', 'year2', 'year3']:
@@ -345,6 +396,15 @@ for year_key in ['year1', 'year2', 'year3']:
 # Update previous Year 3 net income for change tracking
 if st.session_state.previous_year3_net_income is None:
     st.session_state.previous_year3_net_income = income_statements['year3']['net_income']
+
+# Debug information
+if debug_mode:
+    with st.expander("🔍 Debug Information", expanded=False):
+        st.write("**Year 1 Total Orders:**", income_statements['year1']['revenue']['total_orders'])
+        st.write("**Year 2 Total Orders:**", income_statements['year2']['revenue']['total_orders'])
+        st.write("**Year 3 Total Orders:**", income_statements['year3']['revenue']['total_orders'])
+        st.write("**Plotly Version:**", go.__version__)
+        st.write("**Auto-cascade Enabled:**", auto_cascade)
 
 # Main Dashboard
 st.markdown("---")
@@ -482,32 +542,37 @@ with col1:
     # Revenue Growth Chart
     st.subheader("Revenue Growth (3 Years)")
 
-    revenue_data = {
-        'Year': year_labels,
-        'Revenue (₹ Crores)': [
-            income_statements['year1']['revenue']['total_revenue'] / 10000000,
-            income_statements['year2']['revenue']['total_revenue'] / 10000000,
-            income_statements['year3']['revenue']['total_revenue'] / 10000000
-        ]
-    }
+    try:
+        revenue_data = {
+            'Year': year_labels,
+            'Revenue (₹ Crores)': [
+                income_statements['year1']['revenue']['total_revenue'] / 10000000,
+                income_statements['year2']['revenue']['total_revenue'] / 10000000,
+                income_statements['year3']['revenue']['total_revenue'] / 10000000
+            ]
+        }
 
-    fig_revenue = go.Figure(data=[
-        go.Bar(
-            x=revenue_data['Year'],
-            y=revenue_data['Revenue (₹ Crores)'],
-            marker_color=['#3498db', '#2ecc71', '#9b59b6'],
-            text=[f"₹{val:.2f}Cr" for val in revenue_data['Revenue (₹ Crores)']],
-            textposition='outside'
+        fig_revenue = go.Figure(data=[
+            go.Bar(
+                x=revenue_data['Year'],
+                y=revenue_data['Revenue (₹ Crores)'],
+                marker_color=['#3498db', '#2ecc71', '#9b59b6'],
+                text=[f"₹{val:.2f}Cr" for val in revenue_data['Revenue (₹ Crores)']],
+                textposition='outside'
+            )
+        ])
+
+        fig_revenue.update_layout(
+            yaxis_title="Revenue (₹ Crores)",
+            showlegend=False,
+            height=400
         )
-    ])
 
-    fig_revenue.update_layout(
-        yaxis_title="Revenue (₹ Crores)",
-        showlegend=False,
-        height=400
-    )
-
-    st.plotly_chart(fig_revenue, use_container_width=True)
+        st.plotly_chart(fig_revenue, use_container_width=True, key="revenue_chart")
+    except Exception as e:
+        st.error(f"Error rendering revenue chart: {str(e)}")
+        if debug_mode:
+            st.exception(e)
 
 with col2:
     # Margin Progression Chart
