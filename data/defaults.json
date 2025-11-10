@@ -1,0 +1,137 @@
+{
+  "year1": {
+    "year_label": "Year 1 (FY 2026)",
+    "pricing": {
+      "container_price": 150,
+      "monthly_fee": 5000,
+      "setup_fee": 0,
+      "per_use_fee": 1.00,
+      "deposit": 15,
+      "incentive": 5,
+      "green_fee": 0,
+      "revenue_share_pct": 0
+    },
+    "volume": {
+      "restaurants": 300,
+      "new_restaurants": 300,
+      "orders_per_day": 50,
+      "operating_days": 270,
+      "collection_rate": 0.90,
+      "shrinkage": 0.10,
+      "initial_containers": 100,
+      "zomato_orders_per_day": 0,
+      "zomato_operating_days": 0
+    },
+    "cogs": {
+      "container_cost": 150,
+      "container_lifespan": 100,
+      "wash_cost": 2.50,
+      "collection_cost": 5.00,
+      "qc_batch_cost": 25000,
+      "batches_per_month": 1
+    },
+    "opex": {
+      "technology": 7000000,
+      "marketing": 5000000,
+      "num_sales_people": 5,
+      "avg_salary": 600000,
+      "ga": 7000000,
+      "num_hubs": 1,
+      "rent_per_hub": 150000,
+      "equipment_per_hub": 1500000,
+      "utilities_per_hub": 100000,
+      "workers_per_hub": 10,
+      "worker_salary": 20000
+    }
+  },
+  "year2": {
+    "year_label": "Year 2 (FY 2027)",
+    "pricing": {
+      "container_price": 145,
+      "monthly_fee": 5000,
+      "setup_fee": 8000,
+      "per_use_fee": 1.00,
+      "deposit": 15,
+      "incentive": 5,
+      "green_fee": 0,
+      "revenue_share_pct": 0
+    },
+    "volume": {
+      "restaurants": 1600,
+      "new_restaurants": 1300,
+      "orders_per_day": 50,
+      "operating_days": 365,
+      "collection_rate": 0.92,
+      "shrinkage": 0.08,
+      "initial_containers": 100,
+      "zomato_orders_per_day": 0,
+      "zomato_operating_days": 0
+    },
+    "cogs": {
+      "container_cost": 150,
+      "container_lifespan": 100,
+      "wash_cost": 2.30,
+      "collection_cost": 4.50,
+      "qc_batch_cost": 25000,
+      "batches_per_month": 3
+    },
+    "opex": {
+      "technology": 6500000,
+      "marketing": 13700000,
+      "num_sales_people": 12,
+      "avg_salary": 600000,
+      "ga": 11500000,
+      "num_hubs": 3,
+      "rent_per_hub": 150000,
+      "equipment_per_hub": 1500000,
+      "utilities_per_hub": 100000,
+      "workers_per_hub": 10,
+      "worker_salary": 20000
+    }
+  },
+  "year3": {
+    "year_label": "Year 3 (FY 2028)",
+    "pricing": {
+      "container_price": 140,
+      "monthly_fee": 5500,
+      "setup_fee": 10000,
+      "per_use_fee": 1.00,
+      "deposit": 15,
+      "incentive": 5,
+      "green_fee": 4.00,
+      "revenue_share_pct": 0.45
+    },
+    "volume": {
+      "restaurants": 5000,
+      "new_restaurants": 3400,
+      "orders_per_day": 50,
+      "operating_days": 365,
+      "collection_rate": 0.94,
+      "shrinkage": 0.06,
+      "initial_containers": 100,
+      "zomato_orders_per_day": 40000,
+      "zomato_operating_days": 180
+    },
+    "cogs": {
+      "container_cost": 150,
+      "container_lifespan": 100,
+      "wash_cost": 2.10,
+      "collection_cost": 4.00,
+      "qc_batch_cost": 25000,
+      "batches_per_month": 10
+    },
+    "opex": {
+      "technology": 10000000,
+      "marketing": 28000000,
+      "num_sales_people": 25,
+      "avg_salary": 600000,
+      "ga": 21000000,
+      "num_hubs": 10,
+      "rent_per_hub": 150000,
+      "equipment_per_hub": 1500000,
+      "utilities_per_hub": 100000,
+      "workers_per_hub": 8,
+      "worker_salary": 24000
+    }
+  }
+}
