@@ -1,6 +1,41 @@
 # Loop Box Dashboard - Updates & Fixes
 
-## Latest Updates (Phase 2.1)
+## Latest Updates (Phase 2.2 - CRITICAL FIX)
+
+### 🔧 Auto-Cascade Bug Fix
+
+**Problem:** Auto-cascade was enabled but Year 2 & 3 weren't updating from Year 1 changes.
+
+**Root Cause:**
+- The cascade code ran AFTER widgets were rendered
+- Year 2/3 widgets were overwriting cascaded values with widget state
+- Timing issue between session state updates and widget rendering
+
+**Solution Implemented:**
+1. ✅ Moved cascade logic to run BEFORE tabs are created
+2. ✅ Made Year 2 & 3 inputs **read-only** (disabled) when auto-cascade is ON
+3. ✅ Added warning message: "Year 2 & 3 tabs are read-only (auto-calculated from Year 1)"
+4. ✅ Fixed Plotly version debug error
+
+**How It Works Now:**
+- When auto-cascade is **OFF**: All years are editable independently
+- When auto-cascade is **ON**:
+  - Year 1 is editable
+  - Year 2 & 3 tabs are read-only (greyed out)
+  - Year 2 & 3 values automatically update from Year 1
+  - Warning message shows at top of sidebar
+
+**Cascading Logic:**
+- Container Price: -3% per year
+- Monthly Fee: Same in Y2, +10% in Y3
+- Per-Use Fee: Same across all years
+- Wash Cost: -8% in Y2, -9% in Y3
+- Collection Cost: -10% in Y2, -11% in Y3
+- Volume & OpEx: NOT cascaded (different scale per year)
+
+---
+
+## Previous Updates (Phase 2.1)
 
 ### 🔧 Bug Fixes
 
