@@ -202,50 +202,6 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("Adjust variables for each year")
 
-    # Apply auto-cascade BEFORE rendering tabs (uses previous Year 1 values)
-    if auto_cascade:
-        year1 = st.session_state.year_data['year1']
-        year2 = st.session_state.year_data['year2']
-        year3 = st.session_state.year_data['year3']
-
-        # Cascade pricing (with slight reductions for scale)
-        year2['pricing']['container_price'] = int(year1['pricing']['container_price'] * 0.97)
-        year3['pricing']['container_price'] = int(year2['pricing']['container_price'] * 0.97)
-
-        year2['pricing']['monthly_fee'] = year1['pricing']['monthly_fee']
-        year3['pricing']['monthly_fee'] = int(year1['pricing']['monthly_fee'] * 1.10)
-
-        year2['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
-        year3['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
-
-        year2['pricing']['deposit'] = year1['pricing']['deposit']
-        year3['pricing']['deposit'] = year1['pricing']['deposit']
-
-        year2['pricing']['incentive'] = year1['pricing']['incentive']
-        year3['pricing']['incentive'] = year1['pricing']['incentive']
-
-        # Cascade COGS (with efficiency improvements)
-        year2['cogs']['wash_cost'] = year1['cogs']['wash_cost'] * 0.92
-        year3['cogs']['wash_cost'] = year2['cogs']['wash_cost'] * 0.91
-
-        year2['cogs']['collection_cost'] = year1['cogs']['collection_cost'] * 0.90
-        year3['cogs']['collection_cost'] = year2['cogs']['collection_cost'] * 0.89
-
-        year2['cogs']['container_cost'] = year1['cogs']['container_cost']
-        year3['cogs']['container_cost'] = year1['cogs']['container_cost']
-
-        year2['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
-        year3['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
-
-        year2['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
-        year3['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
-
-        year2['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
-        year3['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
-
-        # NOTE: Volume and OpEx are NOT cascaded - each year has different scale
-        # These should be set independently in defaults.json
-
     # Determine if Year 2/3 should be read-only
     year2_disabled = auto_cascade
     year3_disabled = auto_cascade
@@ -407,6 +363,50 @@ with st.sidebar:
                 "Worker Salary/Month (₹)", value=year_data['opex']['worker_salary'],
                 min_value=5000, max_value=100000, step=1000, disabled=is_disabled, key=f"{year_key}_worker_salary"
             )
+
+# Apply auto-cascade AFTER widgets have updated session state
+if auto_cascade:
+    year1 = st.session_state.year_data['year1']
+    year2 = st.session_state.year_data['year2']
+    year3 = st.session_state.year_data['year3']
+
+    # Cascade pricing (with slight reductions for scale)
+    year2['pricing']['container_price'] = int(year1['pricing']['container_price'] * 0.97)
+    year3['pricing']['container_price'] = int(year2['pricing']['container_price'] * 0.97)
+
+    year2['pricing']['monthly_fee'] = year1['pricing']['monthly_fee']
+    year3['pricing']['monthly_fee'] = int(year1['pricing']['monthly_fee'] * 1.10)
+
+    year2['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+    year3['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+
+    year2['pricing']['deposit'] = year1['pricing']['deposit']
+    year3['pricing']['deposit'] = year1['pricing']['deposit']
+
+    year2['pricing']['incentive'] = year1['pricing']['incentive']
+    year3['pricing']['incentive'] = year1['pricing']['incentive']
+
+    # Cascade COGS (with efficiency improvements)
+    year2['cogs']['wash_cost'] = year1['cogs']['wash_cost'] * 0.92
+    year3['cogs']['wash_cost'] = year2['cogs']['wash_cost'] * 0.91
+
+    year2['cogs']['collection_cost'] = year1['cogs']['collection_cost'] * 0.90
+    year3['cogs']['collection_cost'] = year2['cogs']['collection_cost'] * 0.89
+
+    year2['cogs']['container_cost'] = year1['cogs']['container_cost']
+    year3['cogs']['container_cost'] = year1['cogs']['container_cost']
+
+    year2['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+    year3['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+
+    year2['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
+    year3['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
+
+    year2['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
+    year3['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
+
+    # NOTE: Volume and OpEx are NOT cascaded - each year has different scale
+    # These should be set independently in defaults.json
 
 # Calculate income statements for all years
 income_statements = {}
