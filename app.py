@@ -202,16 +202,75 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("Adjust variables for each year")
 
+    # Apply auto-cascade BEFORE rendering tabs (uses previous Year 1 values)
+    if auto_cascade:
+        year1 = st.session_state.year_data['year1']
+        year2 = st.session_state.year_data['year2']
+        year3 = st.session_state.year_data['year3']
+
+        # Cascade pricing (with slight reductions for scale)
+        year2['pricing']['container_price'] = int(year1['pricing']['container_price'] * 0.97)
+        year3['pricing']['container_price'] = int(year2['pricing']['container_price'] * 0.97)
+
+        year2['pricing']['monthly_fee'] = year1['pricing']['monthly_fee']
+        year3['pricing']['monthly_fee'] = int(year1['pricing']['monthly_fee'] * 1.10)
+
+        year2['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+        year3['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
+
+        year2['pricing']['deposit'] = year1['pricing']['deposit']
+        year3['pricing']['deposit'] = year1['pricing']['deposit']
+
+        year2['pricing']['incentive'] = year1['pricing']['incentive']
+        year3['pricing']['incentive'] = year1['pricing']['incentive']
+
+        # Cascade COGS (with efficiency improvements)
+        year2['cogs']['wash_cost'] = year1['cogs']['wash_cost'] * 0.92
+        year3['cogs']['wash_cost'] = year2['cogs']['wash_cost'] * 0.91
+
+        year2['cogs']['collection_cost'] = year1['cogs']['collection_cost'] * 0.90
+        year3['cogs']['collection_cost'] = year2['cogs']['collection_cost'] * 0.89
+
+        year2['cogs']['container_cost'] = year1['cogs']['container_cost']
+        year3['cogs']['container_cost'] = year1['cogs']['container_cost']
+
+        year2['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+        year3['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
+
+        year2['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
+        year3['cogs']['qc_batch_cost'] = year1['cogs']['qc_batch_cost']
+
+        year2['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
+        year3['cogs']['batches_per_month'] = year1['cogs']['batches_per_month']
+
+        # NOTE: Volume and OpEx are NOT cascaded - each year has different scale
+        # These should be set independently in defaults.json
+
+    # Determine if Year 2/3 should be read-only
+    year2_disabled = auto_cascade
+    year3_disabled = auto_cascade
+
+    if auto_cascade:
+        st.warning("⚠️ Year 2 & 3 tabs are read-only (auto-calculated from Year 1)")
+
     year_tabs = st.tabs(["Year 1", "Year 2", "Year 3"])
 
     for idx, (year_key, tab) in enumerate(zip(['year1', 'year2', 'year3'], year_tabs)):
         with tab:
             year_data = st.session_state.year_data[year_key]
 
+            # Determine if this year should be disabled
+            is_disabled = False
+            if year_key == 'year2' and year2_disabled:
+                is_disabled = True
+            elif year_key == 'year3' and year3_disabled:
+                is_disabled = True
+
             st.subheader("💰 Pricing")
             year_data['pricing']['container_price'] = st.number_input(
                 "Container Price (₹)", value=year_data['pricing']['container_price'],
-                min_value=50, max_value=500, step=5, key=f"{year_key}_container_price"
+                min_value=50, max_value=500, step=5, key=f"{year_key}_container_price",
+                disabled=is_disabled
             )
             year_data['pricing']['monthly_fee'] = st.number_input(
                 "Monthly Service Fee (₹)", value=year_data['pricing']['monthly_fee'],
@@ -350,38 +409,6 @@ with st.sidebar:
                 min_value=5000, max_value=100000, step=1000, key=f"{year_key}_worker_salary"
             )
 
-# Apply auto-cascade if enabled
-if auto_cascade:
-    year1 = st.session_state.year_data['year1']
-    year2 = st.session_state.year_data['year2']
-    year3 = st.session_state.year_data['year3']
-
-    # Cascade pricing (with slight reductions for scale)
-    year2['pricing']['container_price'] = int(year1['pricing']['container_price'] * 0.97)  # 3% reduction
-    year3['pricing']['container_price'] = int(year2['pricing']['container_price'] * 0.97)
-
-    year2['pricing']['monthly_fee'] = year1['pricing']['monthly_fee']
-    year3['pricing']['monthly_fee'] = int(year1['pricing']['monthly_fee'] * 1.10)  # 10% increase
-
-    year2['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
-    year3['pricing']['per_use_fee'] = year1['pricing']['per_use_fee']
-
-    year2['pricing']['deposit'] = year1['pricing']['deposit']
-    year3['pricing']['deposit'] = year1['pricing']['deposit']
-
-    # Cascade COGS (with efficiency improvements)
-    year2['cogs']['wash_cost'] = year1['cogs']['wash_cost'] * 0.92  # 8% reduction
-    year3['cogs']['wash_cost'] = year2['cogs']['wash_cost'] * 0.91  # further 9% reduction
-
-    year2['cogs']['collection_cost'] = year1['cogs']['collection_cost'] * 0.90  # 10% reduction
-    year3['cogs']['collection_cost'] = year2['cogs']['collection_cost'] * 0.89  # further 11% reduction
-
-    year2['cogs']['container_cost'] = year1['cogs']['container_cost']
-    year3['cogs']['container_cost'] = year1['cogs']['container_cost']
-
-    year2['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
-    year3['cogs']['container_lifespan'] = year1['cogs']['container_lifespan']
-
 # Calculate income statements for all years
 income_statements = {}
 for year_key in ['year1', 'year2', 'year3']:
@@ -403,8 +430,14 @@ if debug_mode:
         st.write("**Year 1 Total Orders:**", income_statements['year1']['revenue']['total_orders'])
         st.write("**Year 2 Total Orders:**", income_statements['year2']['revenue']['total_orders'])
         st.write("**Year 3 Total Orders:**", income_statements['year3']['revenue']['total_orders'])
-        st.write("**Plotly Version:**", go.__version__)
+        try:
+            import plotly
+            st.write("**Plotly Version:**", plotly.__version__)
+        except:
+            st.write("**Plotly Version:**", "Unable to determine")
         st.write("**Auto-cascade Enabled:**", auto_cascade)
+        st.write("**Year 2 Container Price (after cascade):**", st.session_state.year_data['year2']['pricing']['container_price'])
+        st.write("**Year 3 Container Price (after cascade):**", st.session_state.year_data['year3']['pricing']['container_price'])
 
 # Main Dashboard
 st.markdown("---")
