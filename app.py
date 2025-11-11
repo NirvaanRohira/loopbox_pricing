@@ -269,144 +269,143 @@ with st.sidebar:
             st.subheader("💰 Pricing")
             year_data['pricing']['container_price'] = st.number_input(
                 "Container Price (₹)", value=year_data['pricing']['container_price'],
-                min_value=50, max_value=500, step=5, key=f"{year_key}_container_price",
-                disabled=is_disabled
+                min_value=50, max_value=500, step=5, disabled=is_disabled, key=f"{year_key}_container_price"
             )
             year_data['pricing']['monthly_fee'] = st.number_input(
                 "Monthly Service Fee (₹)", value=year_data['pricing']['monthly_fee'],
-                min_value=0, max_value=50000, step=500, key=f"{year_key}_monthly_fee"
+                min_value=0, max_value=50000, step=500, disabled=is_disabled, key=f"{year_key}_monthly_fee"
             )
             year_data['pricing']['setup_fee'] = st.number_input(
                 "Setup Fee (₹)", value=year_data['pricing']['setup_fee'],
-                min_value=0, max_value=50000, step=1000, key=f"{year_key}_setup_fee"
+                min_value=0, max_value=50000, step=1000, disabled=is_disabled, key=f"{year_key}_setup_fee"
             )
             year_data['pricing']['per_use_fee'] = st.number_input(
                 "Per-Use Fee (₹)", value=year_data['pricing']['per_use_fee'],
-                min_value=0.0, max_value=10.0, step=0.10, key=f"{year_key}_per_use_fee"
+                min_value=0.0, max_value=10.0, step=0.10, disabled=is_disabled, key=f"{year_key}_per_use_fee"
             )
             year_data['pricing']['deposit'] = st.number_input(
                 "Customer Deposit (₹)", value=year_data['pricing']['deposit'],
-                min_value=0, max_value=100, step=5, key=f"{year_key}_deposit"
+                min_value=0, max_value=100, step=5, disabled=is_disabled, key=f"{year_key}_deposit"
             )
             year_data['pricing']['incentive'] = st.number_input(
                 "Return Incentive (₹)", value=year_data['pricing']['incentive'],
-                min_value=0, max_value=50, step=1, key=f"{year_key}_incentive"
+                min_value=0, max_value=50, step=1, disabled=is_disabled, key=f"{year_key}_incentive"
             )
 
             if year_key == 'year3':
                 st.markdown("**🚀 Aggregator (Zomato/Swiggy)**")
                 year_data['pricing']['green_fee'] = st.number_input(
                     "Green Fee (₹)", value=year_data['pricing']['green_fee'],
-                    min_value=0.0, max_value=20.0, step=0.50, key=f"{year_key}_green_fee"
+                    min_value=0.0, max_value=20.0, step=0.50, disabled=is_disabled, key=f"{year_key}_green_fee"
                 )
                 year_data['pricing']['revenue_share_pct'] = st.slider(
                     "Revenue Share %", value=year_data['pricing']['revenue_share_pct'],
-                    min_value=0.0, max_value=1.0, step=0.05, key=f"{year_key}_revenue_share"
+                    min_value=0.0, max_value=1.0, step=0.05, disabled=is_disabled, key=f"{year_key}_revenue_share"
                 )
 
             st.subheader("📈 Volume")
             year_data['volume']['restaurants'] = st.number_input(
                 "Total Restaurants", value=year_data['volume']['restaurants'],
-                min_value=1, max_value=50000, step=50, key=f"{year_key}_restaurants"
+                min_value=1, max_value=50000, step=50, disabled=is_disabled, key=f"{year_key}_restaurants"
             )
             year_data['volume']['new_restaurants'] = st.number_input(
                 "New Restaurants Added", value=year_data['volume']['new_restaurants'],
-                min_value=0, max_value=50000, step=50, key=f"{year_key}_new_restaurants"
+                min_value=0, max_value=50000, step=50, disabled=is_disabled, key=f"{year_key}_new_restaurants"
             )
             year_data['volume']['orders_per_day'] = st.number_input(
                 "Orders/Restaurant/Day", value=year_data['volume']['orders_per_day'],
-                min_value=10, max_value=200, step=5, key=f"{year_key}_orders_per_day"
+                min_value=10, max_value=200, step=5, disabled=is_disabled, key=f"{year_key}_orders_per_day"
             )
             year_data['volume']['operating_days'] = st.number_input(
                 "Operating Days", value=year_data['volume']['operating_days'],
-                min_value=200, max_value=365, step=5, key=f"{year_key}_operating_days"
+                min_value=200, max_value=365, step=5, disabled=is_disabled, key=f"{year_key}_operating_days"
             )
             year_data['volume']['collection_rate'] = st.slider(
                 "Collection Rate %", value=year_data['volume']['collection_rate'],
-                min_value=0.5, max_value=1.0, step=0.01, key=f"{year_key}_collection_rate"
+                min_value=0.5, max_value=1.0, step=0.01, disabled=is_disabled, key=f"{year_key}_collection_rate"
             )
             year_data['volume']['shrinkage'] = st.slider(
                 "Shrinkage %", value=year_data['volume']['shrinkage'],
-                min_value=0.0, max_value=0.20, step=0.01, key=f"{year_key}_shrinkage"
+                min_value=0.0, max_value=0.20, step=0.01, disabled=is_disabled, key=f"{year_key}_shrinkage"
             )
 
             if year_key == 'year3':
                 st.markdown("**🚀 Aggregator Volume**")
                 year_data['volume']['zomato_orders_per_day'] = st.number_input(
                     "Zomato/Swiggy Orders/Day", value=year_data['volume']['zomato_orders_per_day'],
-                    min_value=0, max_value=200000, step=1000, key=f"{year_key}_zomato_orders"
+                    min_value=0, max_value=200000, step=1000, disabled=is_disabled, key=f"{year_key}_zomato_orders"
                 )
                 year_data['volume']['zomato_operating_days'] = st.number_input(
                     "Zomato/Swiggy Days", value=year_data['volume']['zomato_operating_days'],
-                    min_value=0, max_value=365, step=10, key=f"{year_key}_zomato_days"
+                    min_value=0, max_value=365, step=10, disabled=is_disabled, key=f"{year_key}_zomato_days"
                 )
 
             st.subheader("💸 COGS")
             year_data['cogs']['container_cost'] = st.number_input(
                 "Container Cost (₹)", value=year_data['cogs']['container_cost'],
-                min_value=50, max_value=500, step=5, key=f"{year_key}_container_cost"
+                min_value=50, max_value=500, step=5, disabled=is_disabled, key=f"{year_key}_container_cost"
             )
             year_data['cogs']['container_lifespan'] = st.number_input(
                 "Container Lifespan (uses)", value=year_data['cogs']['container_lifespan'],
-                min_value=50, max_value=300, step=10, key=f"{year_key}_lifespan"
+                min_value=50, max_value=300, step=10, disabled=is_disabled, key=f"{year_key}_lifespan"
             )
             year_data['cogs']['wash_cost'] = st.number_input(
                 "Wash Cost/Container (₹)", value=year_data['cogs']['wash_cost'],
-                min_value=0.5, max_value=20.0, step=0.10, key=f"{year_key}_wash_cost"
+                min_value=0.5, max_value=20.0, step=0.10, disabled=is_disabled, key=f"{year_key}_wash_cost"
             )
             year_data['cogs']['collection_cost'] = st.number_input(
                 "Collection Cost/Order (₹)", value=year_data['cogs']['collection_cost'],
-                min_value=0.5, max_value=50.0, step=0.50, key=f"{year_key}_collection_cost"
+                min_value=0.5, max_value=50.0, step=0.50, disabled=is_disabled, key=f"{year_key}_collection_cost"
             )
             year_data['cogs']['qc_batch_cost'] = st.number_input(
                 "QC Batch Cost (₹)", value=year_data['cogs']['qc_batch_cost'],
-                min_value=1000, max_value=100000, step=1000, key=f"{year_key}_qc_batch"
+                min_value=1000, max_value=100000, step=1000, disabled=is_disabled, key=f"{year_key}_qc_batch"
             )
             year_data['cogs']['batches_per_month'] = st.number_input(
                 "Batches/Month", value=year_data['cogs']['batches_per_month'],
-                min_value=1, max_value=50, step=1, key=f"{year_key}_batches"
+                min_value=1, max_value=50, step=1, disabled=is_disabled, key=f"{year_key}_batches"
             )
 
             st.subheader("🏢 OpEx")
             year_data['opex']['technology'] = st.number_input(
                 "Technology (₹/year)", value=year_data['opex']['technology'],
-                min_value=0, max_value=50000000, step=100000, key=f"{year_key}_tech"
+                min_value=0, max_value=50000000, step=100000, disabled=is_disabled, key=f"{year_key}_tech"
             )
             year_data['opex']['marketing'] = st.number_input(
                 "Marketing (₹/year)", value=year_data['opex']['marketing'],
-                min_value=0, max_value=100000000, step=100000, key=f"{year_key}_marketing"
+                min_value=0, max_value=100000000, step=100000, disabled=is_disabled, key=f"{year_key}_marketing"
             )
             year_data['opex']['num_sales_people'] = st.number_input(
                 "Sales Team Size", value=year_data['opex']['num_sales_people'],
-                min_value=0, max_value=100, step=1, key=f"{year_key}_sales_people"
+                min_value=0, max_value=100, step=1, disabled=is_disabled, key=f"{year_key}_sales_people"
             )
             year_data['opex']['avg_salary'] = st.number_input(
                 "Avg Salary/Person (₹/year)", value=year_data['opex']['avg_salary'],
-                min_value=100000, max_value=5000000, step=50000, key=f"{year_key}_salary"
+                min_value=100000, max_value=5000000, step=50000, disabled=is_disabled, key=f"{year_key}_salary"
             )
             year_data['opex']['ga'] = st.number_input(
                 "G&A (₹/year)", value=year_data['opex']['ga'],
-                min_value=0, max_value=100000000, step=100000, key=f"{year_key}_ga"
+                min_value=0, max_value=100000000, step=100000, disabled=is_disabled, key=f"{year_key}_ga"
             )
             year_data['opex']['num_hubs'] = st.number_input(
                 "Number of Micro-Hubs", value=year_data['opex']['num_hubs'],
-                min_value=1, max_value=100, step=1, key=f"{year_key}_hubs"
+                min_value=1, max_value=100, step=1, disabled=is_disabled, key=f"{year_key}_hubs"
             )
             year_data['opex']['rent_per_hub'] = st.number_input(
                 "Rent/Hub/Month (₹)", value=year_data['opex']['rent_per_hub'],
-                min_value=10000, max_value=1000000, step=10000, key=f"{year_key}_rent"
+                min_value=10000, max_value=1000000, step=10000, disabled=is_disabled, key=f"{year_key}_rent"
             )
             year_data['opex']['utilities_per_hub'] = st.number_input(
                 "Utilities/Hub/Month (₹)", value=year_data['opex']['utilities_per_hub'],
-                min_value=5000, max_value=500000, step=5000, key=f"{year_key}_utilities"
+                min_value=5000, max_value=500000, step=5000, disabled=is_disabled, key=f"{year_key}_utilities"
             )
             year_data['opex']['workers_per_hub'] = st.number_input(
                 "Workers/Hub", value=year_data['opex']['workers_per_hub'],
-                min_value=1, max_value=50, step=1, key=f"{year_key}_workers"
+                min_value=1, max_value=50, step=1, disabled=is_disabled, key=f"{year_key}_workers"
             )
             year_data['opex']['worker_salary'] = st.number_input(
                 "Worker Salary/Month (₹)", value=year_data['opex']['worker_salary'],
-                min_value=5000, max_value=100000, step=1000, key=f"{year_key}_worker_salary"
+                min_value=5000, max_value=100000, step=1000, disabled=is_disabled, key=f"{year_key}_worker_salary"
             )
 
 # Calculate income statements for all years
